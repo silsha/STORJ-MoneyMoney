@@ -1,6 +1,6 @@
--- Inofficial Ethereum Extension for MoneyMoney
--- Fetches Ether quantity for address via etherscan API
--- Fetches Ether price in EUR via cryptocompare API
+-- Inofficial STORJ Extension for MoneyMoney
+-- Fetches STORJ quantity for address via etherscan API
+-- Fetches STORJ price in EUR via cryptocompare API
 -- Returns cryptoassets as securities
 --
 -- Username: Ethereum Adresses comma seperated
@@ -9,6 +9,7 @@
 -- MIT License
 
 -- Copyright (c) 2017 Jacubeit
+-- Copyright (c) 2017 Silsha Fux
 
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +32,8 @@
 
 WebBanking{
   version = 0.1,
-  description = "Include your Ether as cryptoportfolio in MoneyMoney by providing a Etheradresses (usernme, comma seperated) and etherscan-API-Key (Password)",
-  services= { "Ethereum" }
+  description = "Include your STORJ as cryptoportfolio in MoneyMoney by providing a Etheradresses (usernme, comma seperated) and etherscan-API-Key (Password)",
+  services= { "STORJ" }
 }
 
 local ethAddresses
@@ -41,7 +42,7 @@ local connection = Connection()
 local currency = "EUR" -- fixme: make dynamik if MM enables input field
 
 function SupportsBank (protocol, bankCode)
-  return protocol == ProtocolWebBanking and bankCode == "Ethereum"
+  return protocol == ProtocolWebBanking and bankCode == "STORJ"
 end
 
 function InitializeSession (protocol, bankCode, username, username2, password, username3)
@@ -51,8 +52,8 @@ end
 
 function ListAccounts (knownAccounts)
   local account = {
-    name = "Ethereum",
-    accountNumber = "Crypto Asset Ethereum",
+    name = "STORJ",
+    accountNumber = "Crypto Asset STORJ",
     currency = currency,
     portfolio = true,
     type = "AccountTypePortfolio"
@@ -103,19 +104,20 @@ end
 
 -- Helper Functions
 function convertWeiToEth(wei)
-  return wei / 1000000000000000000 
+  return wei / 100000000
 end
 
 function cryptocompareRequestUrl()
-  return "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=EUR,USD"
-end 
+  return "https://min-api.cryptocompare.com/data/price?fsym=STORJ&tsyms=EUR,USD"
+end
 
 function etherscanRequestUrl(ethAddress)
   etherscanRoot = "https://api.etherscan.io/api?"
-  params = "&module=account&action=balance&tag=latest"
+  params = "&module=account&action=tokenbalance&tag=latest"
   address = "&address=" .. ethAddress
+  contractaddress = "&contractaddress=0xb64ef51c888972c908cfacf59b47c1afbc0ab8ac"
   apiKey = "&apikey=" .. etherscanApiKey
 
-  return etherscanRoot .. params .. address .. apiKey
+  return etherscanRoot .. params .. address .. contractaddress .. apiKey
 end
 
