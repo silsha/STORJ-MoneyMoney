@@ -7,7 +7,7 @@ to fetch STORJ assets.
 
 ## Extension Setup
 
-You can get a ~signed~unsigned version of this extension from
+You can get a signed version of this extension from
 
 * my [GitHub releases page](https://github.com/silsha/STORJ-MoneyMoney/releases/tag/v0.1)
 
